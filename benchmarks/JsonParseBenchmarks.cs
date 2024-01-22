@@ -4,8 +4,8 @@ using dev.newtonian.jsondata;
 
 namespace dev.newtonian.benchmarks;
 
-[SimpleJob(RuntimeMoniker.Net60, baseline: true)]
-[SimpleJob(RuntimeMoniker.Net80)]
+[SimpleJob(RuntimeMoniker.Net60, baseline: true), SimpleJob(RuntimeMoniker.Net80)]
+[MemoryDiagnoser]
 public class JsonParseBenchmarks
 {
     private string _jsonData = string.Empty;
