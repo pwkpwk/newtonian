@@ -1,12 +1,14 @@
 ﻿using BenchmarkDotNet.Attributes;
-using benchmarks;
+using BenchmarkDotNet.Jobs;
 using dev.newtonian.jsondata;
 
 namespace dev.newtonian.benchmarks;
 
+[SimpleJob(RuntimeMoniker.Net60, baseline: true)]
+[SimpleJob(RuntimeMoniker.Net80)]
 public class JsonParseBenchmarks
 {
-    private string? _jsonData;
+    private string _jsonData = string.Empty;
 
     [Params(10, 250)] public int DependenciesLength = 0;
 
@@ -27,31 +29,31 @@ public class JsonParseBenchmarks
 
         _jsonData = source.ToString();
         Console.WriteLine($"Serialized by Newtonsoft: {_jsonData}");
-        var sPlatform = PlatformRaw.Parse(_jsonData).ToString();
+        var platform = PlatformRaw.Parse(_jsonData);
+        var sPlatform = platform.ToString();
         Console.WriteLine($"Serialized by Platform: {sPlatform}");
+        if (platform.Type != PlatformRaw.FoldType.Gravitational)
+        {
+            Console.Error.WriteLine("Cannot load JSON data with the .Net serialization API");
+            throw new InvalidOperationException();
+        }
     }
 
     [Benchmark]
-    public void NewtonsoftRawParse()
-    {
-        var restored = NewtonsoftRaw.Parse(_jsonData);
-    }
+    public NewtonsoftRaw NewtonsoftRawParse() => NewtonsoftRaw.Parse(_jsonData);
 
     [Benchmark]
-    public void PlatformRawParse()
-    {
-        var restored = PlatformRaw.Parse(_jsonData);
-    }
+    public PlatformRaw PlatformRawParse() => PlatformRaw.Parse(_jsonData);
 
     [Benchmark]
-    public void NewtonsoftPropertiesParse()
-    {
-        var restored = NewtonsoftProperties.Parse(_jsonData);
-    }
+    public NewtonsoftRawStruct NewtonsoftRawStructParse() => NewtonsoftRawStruct.Parse(_jsonData);
+    
+    [Benchmark]
+    public PlatformRawStruct PlatformRawStructParse() => PlatformRawStruct.Parse(_jsonData);
 
     [Benchmark]
-    public void PlatformPropertiesParse()
-    {
-        var restored = PlatformProperties.Parse(_jsonData);
-    }
+    public NewtonsoftProperties NewtonsoftPropertiesParse() => NewtonsoftProperties.Parse(_jsonData);
+
+    [Benchmark]
+    public PlatformProperties PlatformPropertiesParse() => PlatformProperties.Parse(_jsonData);
 }

@@ -6,7 +6,7 @@ using Newtonsoft.Json.Linq;
 namespace dev.newtonian.jsondata;
 
 [DataContract]
-public class NewtonsoftRaw
+public struct NewtonsoftRawStruct
 {
     [DataMember] public long Id;
     [DataMember] public long[]? Dependencies;
@@ -15,7 +15,7 @@ public class NewtonsoftRaw
     public FoldType Type;
 
     public override string ToString() => JsonConvert.SerializeObject(this);
-    public static NewtonsoftRaw Parse(string json) => JToken.Parse(json).ToObject<NewtonsoftRaw>();
+    public static NewtonsoftRawStruct Parse(string json) => JToken.Parse(json).ToObject<NewtonsoftRawStruct>();
 
     public enum FoldType
     {

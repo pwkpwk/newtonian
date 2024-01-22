@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace dev.newtonian.jsondata;
 
-public class PlatformRaw
+public struct PlatformRawStruct
 {
     private static readonly JsonSerializerOptions _options = new() { IncludeFields = true };
     
@@ -11,7 +11,7 @@ public class PlatformRaw
     public long[]? Dependencies;
     public FoldType Type;
 
-    public static PlatformRaw Parse(string json) => JsonDocument.Parse(json).RootElement.Deserialize<PlatformRaw>(_options);
+    public static PlatformRawStruct Parse(string json) => JsonDocument.Parse(json).RootElement.Deserialize<PlatformRawStruct>(_options);
     public override string ToString() => JsonSerializer.Serialize(this, _options);
 
     [JsonConverter(typeof(JsonStringEnumConverter))]

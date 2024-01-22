@@ -1,4 +1,3 @@
-using benchmarks;
 using dev.newtonian.jsondata;
 
 namespace dev.newtonian.test;

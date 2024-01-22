@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace benchmarks;
+namespace dev.newtonian.jsondata;
 
 public class PlatformProperties
 {
@@ -12,7 +12,7 @@ public class PlatformProperties
     public static PlatformProperties Parse(string json) => JsonDocument.Parse(json).RootElement.Deserialize<PlatformProperties>();
     public override string ToString() => JsonSerializer.Serialize(this);
 
-    [JsonConverter(typeof(JsonStringEnumConverter<FoldType>))]
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum FoldType
     {
         Hilbert,
